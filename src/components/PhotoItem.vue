@@ -1,7 +1,17 @@
 <template>
-  <div>Hi</div>
+  <img :src="src" alt="" />
 </template>
 <script>
-export default {};
+export default {
+  props: {
+    src: String,
+  },
+};
 </script>
-<style lang=""></style>
+<style>
+img {
+  /* height: 100%;
+  width: 100%; */
+  object-fit: cover;
+}
+</style>
