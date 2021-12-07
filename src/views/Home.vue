@@ -11,17 +11,18 @@
     <!-- Photo Area -->
     <div class="photo-area w-full">
       <div class="photo-grid">
-        <!-- <transition-group appear name="fade"> -->
-        <!-- <div class="item" v-for="(item, index) in 30" :key="index"></div> -->
-        <!-- <div
-          class="item"
-          v-VueAnimateOnScroll="'fade'"
-          v-for="(item, index) in 50"
-          :key="index"
-        ></div> -->
-        <!-- <div class="item" v-VueAnimateOnScroll="2"></div> -->
-        <!-- </transition-group> -->
-        <Observe><PhotoItem /></Observe>
+        <transition-group appear name="fade">
+          <Observe
+            v-for="(item, index) in 50"
+            :key="index"
+            :index="index"
+            class="item"
+            @onChange="onChange"
+            :threshold="0.5"
+          >
+            <PhotoItem />
+          </Observe>
+        </transition-group>
       </div>
     </div>
   </div>
@@ -33,9 +34,26 @@ import PhotoItem from '../components/PhotoItem.vue';
 
 export default {
   name: 'Home',
+  data() {
+    return {
+      apiKey: '563492ad6f917000010000013b1b3452f00b42d88ee884421dcc2fbe',
+    };
+  },
   components: {
     Observe,
     PhotoItem,
+  },
+  methods: {
+    onChange(entry, unobserve) {
+      // console.log(entry);
+      // console.log(123, event);
+
+      if (entry.isIntersecting) {
+        console.log(entry.target.attributes.index.value);
+
+        unobserve();
+      }
+    },
   },
 };
 </script>
@@ -64,12 +82,12 @@ export default {
   // width: 13rem;
 }
 
-// .fade-enter-active {
-//   animation: 2s fade;
-// }
-.fade {
+.fade-enter-active {
   animation: 2s fade;
 }
+// .fade {
+//   animation: 2s fade;
+// }
 
 @keyframes fade {
   from {
