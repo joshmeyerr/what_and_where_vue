@@ -11,7 +11,7 @@
     <!-- Photo Area -->
     <div class="photo-area w-full">
       <div class="photo-grid">
-        <transition-group appear name="fade">
+        <!-- <transition-group appear name="fade">
           <Observe
             v-for="(item, index) in pexelsArr"
             :key="index"
@@ -20,9 +20,18 @@
             @onChange="onChange"
             :threshold="0.5"
           >
-            <PhotoItem :src="pexelsArr[index]" />
+            <PhotoItem :src="pexelsArr[index].src" />
           </Observe>
-        </transition-group>
+        </transition-group> -->
+        <!-- <div class="item"></div> -->
+        <PhotoItem
+          v-observe="{ class: 'fade', options: { threshold: 0.5 } }"
+          v-for="(photo, index) in pexelsArr"
+          :key="index"
+          :photoIndex="index"
+          class="item"
+          :src="photo.src"
+        />
       </div>
     </div>
   </div>
@@ -30,7 +39,7 @@
 
 <script>
 import axios from 'axios';
-import Observe from '../components/Observe.vue';
+// import Observe from '../components/Observe.vue';
 import PhotoItem from '../components/PhotoItem.vue';
 
 export default {
@@ -42,7 +51,7 @@ export default {
     };
   },
   components: {
-    Observe,
+    // Observe,
     PhotoItem,
   },
   mounted() {
@@ -61,13 +70,10 @@ export default {
           },
         );
 
-        // console.log(res.data.photos);
         const { photos } = res.data;
         photos.forEach((photo) => {
-          this.pexelsArr.push(photo.src.large);
+          this.pexelsArr.push({ src: photo.src.large, show: false });
         });
-
-        console.log(this.pexelsArr);
       } catch (error) {
         console.log(error);
       }
@@ -75,6 +81,8 @@ export default {
     onChange(entry, unobserve) {
       if (entry.isIntersecting) {
         // console.log(entry.target.attributes.index.value);
+
+        this.pexelsArr[entry.target.attributes.index.value].show = true;
 
         unobserve();
       }
@@ -107,12 +115,12 @@ export default {
   // width: 13rem;
 }
 
-.fade-enter-active {
-  animation: 2s fade;
-}
-// .fade {
+// .fade-enter-active {
 //   animation: 2s fade;
 // }
+.fade {
+  animation: 2s fade;
+}
 
 @keyframes fade {
   from {
