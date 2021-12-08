@@ -19,16 +19,15 @@
     <div class="photo-area w-full">
       <div class="photo-grid">
         <PhotoItem
+          class="item"
           v-scroll-observer="{
             stateOne: 'fade-top',
             stateTwo: 'fade-bottom',
             options: { threshold: 0.1 },
           }"
-          v-for="(photo, index) in pexelsArr"
+          v-for="(photo, index) in resArray"
           :key="index"
-          :photoIndex="index"
-          class="item"
-          :src="photo.src"
+          :src="photo"
         />
       </div>
     </div>
@@ -36,7 +35,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { mapState, mapActions } from 'vuex';
 import PhotoItem from '../components/PhotoItem.vue';
 import ButtonIcon from '../components/ButtonIcon.vue';
 
@@ -44,8 +43,6 @@ export default {
   name: 'Home',
   data() {
     return {
-      apiKey: '563492ad6f917000010000013b1b3452f00b42d88ee884421dcc2fbe',
-      pexelsArr: [],
       faCategoryOptions: [
         {
           class: 'fas fa-utensils',
@@ -77,27 +74,31 @@ export default {
   mounted() {
     this.getPexels();
   },
+  computed: {
+    ...mapState(['resArray']),
+  },
   methods: {
-    async getPexels() {
-      try {
-        const res = await axios.get(
-          'https://jmproxy.herokuapp.com/https://api.pexels.com/v1/search?query=food&per_page=50&size=large&orientation=square',
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: this.apiKey,
-            },
-          },
-        );
+    ...mapActions(['getPexels']),
+    // async getPexels() {
+    //   try {
+    //     const res = await axios.get(
+    //       'https://jmproxy.herokuapp.com/https://api.pexels.com/v1/search?query=food&per_page=50&size=large&orientation=square',
+    //       {
+    //         headers: {
+    //           'Content-Type': 'application/json',
+    //           Authorization: this.apiKey,
+    //         },
+    //       },
+    //     );
 
-        const { photos } = res.data;
-        photos.forEach((photo) => {
-          this.pexelsArr.push({ src: photo.src.large, show: false });
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    //     const { photos } = res.data;
+    //     photos.forEach((photo) => {
+    //       this.pexelsArr.push({ src: photo.src.large, show: false });
+    //     });
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
   },
 };
 </script>
