@@ -3,15 +3,7 @@
     <!-- Question Area -->
     <div class="question-area">
       <div class="bg-gray-200 flex flex-col h-96 justify-center items-center">
-        <div class="question text-xl">Welcome Blah Blah</div>
-        <div class="icon-group flex">
-          <ButtonIcon
-            v-for="(icon, index) in faCategoryOptions"
-            :key="index"
-            class="m-4"
-            :iconClass="icon.class"
-          />
-        </div>
+        <LocationQuestion v-if="questionIndex === 0" />
       </div>
     </div>
 
@@ -37,68 +29,27 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import PhotoItem from '../components/PhotoItem.vue';
-import ButtonIcon from '../components/ButtonIcon.vue';
+// import ButtonIcon from '../components/ButtonIcon.vue';
+import LocationQuestion from '../components/questions/LocationQuestion.vue';
 
 export default {
   name: 'Home',
   data() {
-    return {
-      faCategoryOptions: [
-        {
-          class: 'fas fa-utensils',
-          value: 'food',
-        },
-        {
-          class: 'fas fa-glass-martini-alt',
-          value: 'drinks',
-        },
-        {
-          class: 'fas fa-drum',
-          value: 'concert',
-        },
-        {
-          class: 'fas fa-film',
-          value: 'movies',
-        },
-        {
-          class: 'fas fa-hotel',
-          value: 'hotel',
-        },
-      ],
-    };
+    return {};
   },
   components: {
     PhotoItem,
-    ButtonIcon,
+    // ButtonIcon,
+    LocationQuestion,
   },
   mounted() {
     this.getPexels();
   },
   computed: {
-    ...mapState(['resArray']),
+    ...mapState(['resArray', 'questionIndex']),
   },
   methods: {
     ...mapActions(['getPexels']),
-    // async getPexels() {
-    //   try {
-    //     const res = await axios.get(
-    //       'https://jmproxy.herokuapp.com/https://api.pexels.com/v1/search?query=food&per_page=50&size=large&orientation=square',
-    //       {
-    //         headers: {
-    //           'Content-Type': 'application/json',
-    //           Authorization: this.apiKey,
-    //         },
-    //       },
-    //     );
-
-    //     const { photos } = res.data;
-    //     photos.forEach((photo) => {
-    //       this.pexelsArr.push({ src: photo.src.large, show: false });
-    //     });
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
   },
 };
 </script>
