@@ -10,22 +10,9 @@
 
     <!-- Photo Area -->
     <div class="photo-area w-full">
-      <div class="photo-grid">
-        <!-- <transition-group appear name="fade">
-          <Observe
-            v-for="(item, index) in pexelsArr"
-            :key="index"
-            :index="index"
-            class="item"
-            @onChange="onChange"
-            :threshold="0.5"
-          >
-            <PhotoItem :src="pexelsArr[index].src" />
-          </Observe>
-        </transition-group> -->
-        <!-- <div class="item"></div> -->
+      <div ref="photoGrid" class="photo-grid">
         <PhotoItem
-          v-observe="{ class: 'fade', options: { threshold: 0.5 } }"
+          v-observe="{ class: 'fade-bottom', options: { threshold: 0.5 } }"
           v-for="(photo, index) in pexelsArr"
           :key="index"
           :photoIndex="index"
@@ -39,7 +26,6 @@
 
 <script>
 import axios from 'axios';
-// import Observe from '../components/Observe.vue';
 import PhotoItem from '../components/PhotoItem.vue';
 
 export default {
@@ -48,14 +34,15 @@ export default {
     return {
       apiKey: '563492ad6f917000010000013b1b3452f00b42d88ee884421dcc2fbe',
       pexelsArr: [],
+      windowWidth: window.innerWidth,
     };
   },
   components: {
-    // Observe,
     PhotoItem,
   },
   mounted() {
     this.getPexels();
+    this.parsePhotoWidth();
   },
   methods: {
     async getPexels() {
@@ -78,58 +65,64 @@ export default {
         console.log(error);
       }
     },
-    onChange(entry, unobserve) {
-      if (entry.isIntersecting) {
-        // console.log(entry.target.attributes.index.value);
+    parsePhotoWidth() {
+      // eslint-disable-next-line no-restricted-globals
+      // console.log(this.windowWidth / 200);
 
-        this.pexelsArr[entry.target.attributes.index.value].show = true;
-
-        unobserve();
-      }
+      const photoCount = Math.floor(this.windowWidth / 200);
+      console.log(photoCount);
+      console.log(this.$refs.photoGrid);
+      this.$refs.photoGrid.style.rowCount = photoCount;
     },
   },
 };
 </script>
 <style lang="scss">
-@mixin setDelay($stagger) {
-  &:nth-child(#{$stagger}n) {
-    animation-delay: 100ms;
-    background-color: red;
-  }
-  &:nth-child(#{$stagger}n - 1) {
-    animation-delay: 300ms;
-    background-color: green;
+@mixin setDelay($rowCount) {
+  & > * {
+    @for $i from 1 through $rowCount {
+      &:nth-child(#{$rowCount}n + #{$i}) {
+        animation-delay: $i * 110 + ms;
+      }
+    }
   }
 }
 .photo-grid {
-  // @include setDelay(4);
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
+  gap: 0.5rem;
+
+  $rowCount: 6;
+  @include setDelay($rowCount);
 }
 .item {
-  @include setDelay(2);
+  // $rowCount: 1;
+  // @include setDelay($rowCount);
   // animation-name: fade-in-up;
   // animation: 2s fade;
   // height: 13rem;
   // width: 13rem;
+  opacity: 0;
 }
 
 // .fade-enter-active {
 //   animation: 2s fade;
 // }
-.fade {
+.fade-bottom {
   animation: 2s fade;
+}
+.visible {
+  // opacity: 1;
 }
 
 @keyframes fade {
-  from {
+  0% {
     opacity: 0;
-    transform: translate3d(0, 100%, 0);
+    transform: translateY(15rem);
   }
-  to {
+  100% {
     opacity: 1;
-    // transform: none;
+    transform: none;
   }
 }
 </style>

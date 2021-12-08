@@ -6,6 +6,7 @@ export default {
       entries.forEach((singleEntry) => {
         if (singleEntry.isIntersecting) {
           singleEntry.target.classList.add(binding.value.class);
+          singleEntry.target.classList.add('visible');
         } else {
           //   singleEntry.target.classList.remove(binding.value.class);
         }
