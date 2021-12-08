@@ -2,17 +2,28 @@
   <div class="home">
     <!-- Question Area -->
     <div class="question-area">
-      <div class="bg-gray-200 flex h-96 justify-center items-center">
+      <div class="bg-gray-200 flex flex-col h-96 justify-center items-center">
         <div class="question text-xl">Welcome Blah Blah</div>
-        <div class="down-arrow">>>></div>
+        <div class="icon-group flex">
+          <ButtonIcon
+            v-for="(icon, index) in faCategoryOptions"
+            :key="index"
+            class="m-4"
+            :iconClass="icon.class"
+          />
+        </div>
       </div>
     </div>
 
     <!-- Photo Area -->
     <div class="photo-area w-full">
-      <div ref="photoGrid" class="photo-grid">
+      <div class="photo-grid">
         <PhotoItem
-          v-observe="{ class: 'fade-bottom', options: { threshold: 0.5 } }"
+          v-scroll-observer="{
+            stateOne: 'fade-top',
+            stateTwo: 'fade-bottom',
+            options: { threshold: 0.1 },
+          }"
           v-for="(photo, index) in pexelsArr"
           :key="index"
           :photoIndex="index"
@@ -27,6 +38,7 @@
 <script>
 import axios from 'axios';
 import PhotoItem from '../components/PhotoItem.vue';
+import ButtonIcon from '../components/ButtonIcon.vue';
 
 export default {
   name: 'Home',
@@ -34,15 +46,36 @@ export default {
     return {
       apiKey: '563492ad6f917000010000013b1b3452f00b42d88ee884421dcc2fbe',
       pexelsArr: [],
-      windowWidth: window.innerWidth,
+      faCategoryOptions: [
+        {
+          class: 'fas fa-utensils',
+          value: 'food',
+        },
+        {
+          class: 'fas fa-glass-martini-alt',
+          value: 'drinks',
+        },
+        {
+          class: 'fas fa-drum',
+          value: 'concert',
+        },
+        {
+          class: 'fas fa-film',
+          value: 'movies',
+        },
+        {
+          class: 'fas fa-hotel',
+          value: 'hotel',
+        },
+      ],
     };
   },
   components: {
     PhotoItem,
+    ButtonIcon,
   },
   mounted() {
     this.getPexels();
-    this.parsePhotoWidth();
   },
   methods: {
     async getPexels() {
@@ -65,15 +98,6 @@ export default {
         console.log(error);
       }
     },
-    parsePhotoWidth() {
-      // eslint-disable-next-line no-restricted-globals
-      // console.log(this.windowWidth / 200);
-
-      const photoCount = Math.floor(this.windowWidth / 200);
-      console.log(photoCount);
-      console.log(this.$refs.photoGrid);
-      this.$refs.photoGrid.style.rowCount = photoCount;
-    },
   },
 };
 </script>
@@ -83,6 +107,7 @@ export default {
     @for $i from 1 through $rowCount {
       &:nth-child(#{$rowCount}n + #{$i}) {
         animation-delay: $i * 110 + ms;
+        // animation-delay: random(9) / 10 + s;
       }
     }
   }
@@ -96,32 +121,39 @@ export default {
   @include setDelay($rowCount);
 }
 .item {
-  // $rowCount: 1;
-  // @include setDelay($rowCount);
-  // animation-name: fade-in-up;
-  // animation: 2s fade;
-  // height: 13rem;
-  // width: 13rem;
   opacity: 0;
+  animation-fill-mode: both;
 }
 
-// .fade-enter-active {
-//   animation: 2s fade;
-// }
+.fade-top {
+  animation: 1s fadeTop;
+  animation-fill-mode: both;
+}
+
 .fade-bottom {
-  animation: 2s fade;
-}
-.visible {
-  // opacity: 1;
+  animation: 1s fadeBottom;
+  animation-fill-mode: both;
 }
 
-@keyframes fade {
+@keyframes fadeBottom {
   0% {
     opacity: 0;
-    transform: translateY(15rem);
+    transform: translateY(2rem);
   }
   100% {
     opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+}
+@keyframes fadeTop {
+  0% {
+    opacity: 0;
+    transform: translateY(-2rem);
+  }
+  100% {
+    opacity: 1;
+    visibility: visible;
     transform: none;
   }
 }

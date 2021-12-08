@@ -1,14 +1,19 @@
 export default {
   beforeMount(entry, binding) {
-    let { options } = binding.value;
+    const { options } = binding.value;
     const animatedScrollObserver = new IntersectionObserver((entries) => {
-      options = 1;
       entries.forEach((singleEntry) => {
         if (singleEntry.isIntersecting) {
-          singleEntry.target.classList.add(binding.value.class);
-          singleEntry.target.classList.add('visible');
-        } else {
-          //   singleEntry.target.classList.remove(binding.value.class);
+          if (singleEntry.boundingClientRect.y <= 0) {
+            singleEntry.target.classList.add(binding.value.stateOne);
+          } else {
+            singleEntry.target.classList.add(binding.value.stateTwo);
+          }
+        } else if (!singleEntry.isIntersecting) {
+          singleEntry.target.classList.remove(binding.value.stateOne);
+          singleEntry.target.classList.remove(binding.value.stateTwo);
+          // eslint-disable-next-line no-param-reassign
+          singleEntry.target.style.opacity = 0;
         }
       });
     }, options);
