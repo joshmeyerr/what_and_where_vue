@@ -1,6 +1,6 @@
 <template>
   <div>
-    <i class="text-3xl" :class="iconClass"></i>
+    <i class="text-4xl" :class="iconClass"></i>
   </div>
 </template>
 <script>

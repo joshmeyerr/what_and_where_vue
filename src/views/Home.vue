@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <!-- Question Area -->
-    <div class="question-area">
+    <div class="question-area overflow-hidden m-4 shadow-lg rounded-lg">
       <div class="bg-gray-200 flex flex-col h-96 justify-center items-center">
         <LocationQuestion v-if="questionIndex === 0" />
       </div>
@@ -9,9 +9,9 @@
 
     <!-- Photo Area -->
     <div class="photo-area w-full">
-      <div class="photo-grid">
+      <div class="photo-grid m-4">
         <PhotoItem
-          class="item"
+          class="item shadow-lg rounded-lg"
           v-scroll-observer="{
             stateOne: 'fade-top',
             stateTwo: 'fade-bottom',
@@ -66,7 +66,7 @@ export default {
 }
 .photo-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 0.5rem;
 
   $rowCount: 6;
