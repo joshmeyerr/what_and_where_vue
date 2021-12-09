@@ -92,3 +92,16 @@ export default {
   }
 }
 </style>
+
+        <!-- <input
+          class="mt-4"
+          type="text"
+          v-model="questionAnswers.location.searchString"
+          @keyup="destinationLocation(questionAnswers.location.searchString)"
+        />
+        <ul>
+          <li v-for="(location, index) in locationAutocomplete" :key="index">
+            {{ location.properties.address_line1 }}, {{ location.properties.city }},
+            {{ location.properties.state_code }}
+          </li>
+        </ul> -->
