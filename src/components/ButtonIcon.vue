@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="cursor-pointer">
     <i class="text-4xl" :class="iconClass"></i>
   </div>
 </template>

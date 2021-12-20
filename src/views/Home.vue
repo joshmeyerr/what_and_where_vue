@@ -3,6 +3,10 @@
     <!-- Question Area -->
     <div class="question-area overflow-hidden m-4 shadow-lg rounded-lg">
       <div class="bg-gray-200 flex flex-col h-96 justify-center items-center">
+        <div class="flex">
+          <ButtonIcon :iconClass="faOptions.general.left" />
+          <!-- <ButtonIcon :iconClass="faOptions.general.right" /> -->
+        </div>
         <LocationQuestion v-if="questionIndex === 0" />
       </div>
     </div>
@@ -29,7 +33,7 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import PhotoItem from '../components/PhotoItem.vue';
-// import ButtonIcon from '../components/ButtonIcon.vue';
+import ButtonIcon from '../components/ButtonIcon.vue';
 import LocationQuestion from '../components/questions/LocationQuestion.vue';
 
 export default {
@@ -39,14 +43,14 @@ export default {
   },
   components: {
     PhotoItem,
-    // ButtonIcon,
+    ButtonIcon,
     LocationQuestion,
   },
   mounted() {
     this.getPexels();
   },
   computed: {
-    ...mapState(['resArray', 'questionIndex']),
+    ...mapState(['resArray', 'questionIndex', 'faOptions']),
   },
   methods: {
     ...mapActions(['getPexels']),

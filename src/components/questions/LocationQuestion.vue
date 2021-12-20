@@ -6,9 +6,7 @@
       <transition name="exit">
         <div
           v-if="useCurrentLocation"
-          class="flex flex-col border-solid border-4 border-black 
-          cursor-pointer rounded-lg
-          m-12 p-8 "
+          class="flex flex-col border-solid border-4 border-black cursor-pointer rounded-lg m-12 p-8"
           @click="currentLocation"
         >
           <div class="text-xl">Where you are now</div>
@@ -93,7 +91,7 @@ export default {
 }
 </style>
 
-        <!-- <input
+<!-- <input
           class="mt-4"
           type="text"
           v-model="questionAnswers.location.searchString"

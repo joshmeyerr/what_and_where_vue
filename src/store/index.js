@@ -2,13 +2,14 @@
 /* eslint-disable no-unused-vars */
 import { createStore } from 'vuex';
 import axios from 'axios';
+import keys from '../apiKeys';
 
 export default createStore({
   state: {
-    pexelsApi: '563492ad6f917000010000013b1b3452f00b42d88ee884421dcc2fbe',
-    positionStackApi: 'e20b679c7dfd93c7c031fbdec6731af9',
-    geoApifyApi: '30506b10d4594fd3a1e72329d95fec0e',
-    herokuProxy: 'https://jmproxy.herokuapp.com/',
+    pexelsApi: keys.pexelsApi,
+    positionStackApi: keys.positionStackApi,
+    geoApifyApi: keys.geoApifyApi,
+    herokuProxy: keys.herokuProxy,
 
     questionIndex: 0,
     resArray: Array(25),
@@ -39,6 +40,10 @@ export default createStore({
       location: {
         current: 'fas fa-globe-americas',
         destination: 'fas fa-plane',
+      },
+      general: {
+        left: 'fas fa-arrow-circle-left',
+        right: 'fas fa-arrow-circle-right',
       },
     },
 
@@ -86,9 +91,11 @@ export default createStore({
   },
   actions: {
     async getPexels({ commit, state, dispatch }) {
+      console.log(process.env.PEXELS_API);
       try {
         const res = await axios.get(
-          'https://jmproxy.herokuapp.com/https://api.pexels.com/v1/search?query=food&per_page=25&size=large&orientation=square',
+          // `${state.herokuProxy}https://api.pexels.com/v1/search?query=food&per_page=25&size=large&orientation=square`,
+          // 'https://api.pexels.com/v1/search?query=food&per_page=25&size=large&orientation=square',
           {
             headers: {
               'Content-Type': 'application/json',
@@ -148,8 +155,7 @@ export default createStore({
       // }
     },
     async positionReverse({ commit, state, dispatch }) {
-      const { latitude, longitude } = state.location.coordinates;
-      console.log(latitude, longitude);
+      const { latitude, longitude } = state.questionAnswers.location.coordinates;
       try {
         const res = await axios.get(
           `${state.herokuProxy}http://api.positionstack.com/v1/reverse?access_key=${state.positionStackApi}&query=${latitude},${longitude}`,
